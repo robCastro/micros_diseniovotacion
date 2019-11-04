@@ -1,0 +1,23 @@
+{
+  "name": "diseniovotacion",
+  "version": "1.0.0",
+  "description": "Microservicio para diseniar las votaciones.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "IGF Team Pusheen",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.19.4",
+    "sequelize-auto": "^0.4.29"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^6.4.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.2",
+    "sequelize-cli": "^5.5.1"
+  }
+}
