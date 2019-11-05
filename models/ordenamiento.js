@@ -2,17 +2,17 @@
 
 module.exports = function(sequelize, DataTypes) {
 	return sequelize.define('ordenamiento', {
-		idordenamiento: {
+		id_ordenamiento: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		nombre: {
+		nombre_ordenamiento: {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-		descripcion: {
+		descripcion_ordenamiento: {
 			type: DataTypes.STRING,
 			allowNull: true
 		}

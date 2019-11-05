@@ -1,27 +1,27 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('nivel_centrovotacion', {
-		idnivel_centrovotacion: {
+	return sequelize.define('nivel_centro_votacion', {
+		id_nivel_centro_votacion: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		idcentrovotacion_fk: {
+		id_centro_votacion: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
-				model: 'centrovotacion',
-				key: 'idcentrovotacion'
+				model: 'centro_votacion',
+				key: 'id_centro_votacion'
 			}
 		},
-		idnivel_fk: {
+		id_nivel: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		}
 	}, {
-		tableName: 'nivel_centrovotacion',
+		tableName: 'nivel_centro_votacion',
 		timestamps: false
 	});
 };

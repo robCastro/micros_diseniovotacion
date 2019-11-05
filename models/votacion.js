@@ -2,43 +2,51 @@
 
 module.exports = function(sequelize, DataTypes) {
 	return sequelize.define('votacion', {
-		idvotacion: {
+		id_votacion: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		fechainicio: {
-			type: DataTypes.DATE,
-			allowNull: false
-		},
-		fechafin: {
-			type: DataTypes.DATE,
-			allowNull: false
-		},
-		nombre: {
-			type: DataTypes.STRING,
-			allowNull: false
-		},
-		descripcion: {
-			type: DataTypes.STRING,
-			allowNull: true
-		},
-		idtipovotacion_fk: {
+		id_tipo_votacion: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
-				model: 'tipovotacion',
-				key: 'idtipovotacion'
+				model: 'tipo_votacion',
+				key: 'id_tipo_votacion'
 			}
 		},
-		idordenamiento_fk: {
+		id_ordenamiento: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
 				model: 'ordenamiento',
-				key: 'idordenamiento'
+				key: 'id_ordenamiento'
 			}
+		},
+		fecha_inicio_votacion: {
+			type: DataTypes.DATEONLY,
+			allowNull: false
+		},
+		hora_inicio_votacion: {
+			type: DataTypes.TIME,
+			allowNull: false
+		},
+		fecha_fin_votacion: {
+			type: DataTypes.DATEONLY,
+			allowNull: false
+		},
+		hora_fin_votacion: {
+			type: DataTypes.TIME,
+			allowNull: false
+		},
+		nombre_votacion: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
+		descripcion_votacion: {
+			type: DataTypes.STRING,
+			allowNull: true
 		}
 	}, {
 		tableName: 'votacion',

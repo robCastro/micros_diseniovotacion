@@ -1,23 +1,23 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('tipovotacion', {
-		idtipovotacion: {
+	return sequelize.define('tipo_votacion', {
+		id_tipo_votacion: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			primaryKey: true,
 			autoIncrement: true
 		},
-		nombre: {
+		nombre_tipo_votacion: {
 			type: DataTypes.STRING,
 			allowNull: false
 		},
-		descripcion: {
+		descripcion_tipo_votacion: {
 			type: DataTypes.STRING,
 			allowNull: true
 		}
 	}, {
-		tableName: 'tipovotacion',
+		tableName: 'tipo_votacion',
 		timestamps: false
 	});
 };
