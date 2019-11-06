@@ -18,6 +18,7 @@
     "pg": "^6.4.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.2",
-    "sequelize-cli": "^5.5.1"
+    "sequelize-cli": "^5.5.1",
+    "validate-ip-node": "^1.0.6"
   }
 }
