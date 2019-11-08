@@ -21,16 +21,23 @@ const config = require(__dirname + '/config/config.json')[env];
 //   'nivel_centrovotacion'
 // ];
 
+console.log(config);
+
 var auto = new SequelizeAuto(config.database, config.username, config.password, {
     host: config.host,
     dialect: config.dialect,
     port: config.port,
     directory:'./models',
+    dialectOptions:{
+      ssl: config.ssl
+    },
     additional: {
         timestamps: false
     },
     // tables: tablas
 });
+
+console.log(auto);
 
 auto.run(function (err) {
   if (err) throw err;
