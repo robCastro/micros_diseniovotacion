@@ -31,7 +31,7 @@ exports.getMesas = function(req, res){
 	if(Object.keys(req.query).length > 0){
 		if (req.query.ip){
 			if(!isValidIP(req.query.ip)){
-				res.status(500).json({ msg: "Ip no valida" });
+				res.status(400).json({ msg: "Ip no valida" });
 			}
 		}
 		Mesa.findAll({
@@ -59,6 +59,70 @@ exports.getMesas = function(req, res){
 	}
 }
 
-exports.putMesa = function(req, res){
+exports.putMesaId = function(req, res){
 	
+	let {id_mesa, id_votacion, id_centro_votacion, numero_mesa, ponderacion_mesa, cantidad_abstenciones_mesa, cantidad_anulados_mesa, habilitada_mesa, en_uso_mesa, ip_mesa } = req.body;
+	console.log(id_mesa, id_votacion, id_centro_votacion, numero_mesa, ponderacion_mesa, cantidad_abstenciones_mesa, cantidad_anulados_mesa, habilitada_mesa, en_uso_mesa, ip_mesa);
+	if(Number.isNaN(parseFloat(ponderacion_mesa))){
+		res.status(400).json({ msg: 'Utilizar parametros numericos'})
+	}
+	if(!isValidIP(ip_mesa)){
+		res.status(400).json({ msg: "Ip no valida" });
+	}
+	let errores = [];
+	if (!id_mesa){
+		errores.push({msg: "Mesa no especificada"});
+	}
+	if (!id_votacion){
+		errores.push({msg: "Votacion no especificada"});
+	}
+	if (!id_centro_votacion){
+		errores.push({msg: "Centro de Votacion no especificado"});
+	}
+	if (!numero_mesa){
+		errores.push({msg: "Numero de mesa no especificado"});
+	}
+	if (!ponderacion_mesa){
+		errores.push({msg: "Ponderacion de mesa no especificada"});
+	}
+	if (cantidad_abstenciones_mesa == null){
+		errores.push({msg: "Cantidad de Abstenciones no especificada"});
+	}
+	if (cantidad_anulados_mesa == null){
+		errores.push({msg: "Cantidad de Anulados no especificada"});
+	}
+	if (habilitada_mesa == null){
+		errores.push({msg: "No se especificó si la mesa está habilitada"});
+	}
+	if (en_uso_mesa == null){
+		errores.push({msg: "No se especificó si la mesa está en uso"});
+	}
+	if (!ip_mesa){
+		errores.push({msg: "Ip de Mesa no especificada"});
+	}
+	if(errores.length > 0){
+    	res.status(400).json(errores);
+    }
+    else{
+		Mesa.update({
+			id_votacion: id_votacion,
+			id_centro_votacion: id_centro_votacion,
+			numero_mesa: numero_mesa,
+			ponderacion_mesa: ponderacion_mesa,
+			cantidad_abstenciones_mesa: cantidad_abstenciones_mesa,
+			cantidad_anulados_mesa: cantidad_anulados_mesa,
+			habilitada_mesa: habilitada_mesa,
+			en_uso_mesa: en_uso_mesa,
+			ip_mesa: ip_mesa
+		},{
+			where:{
+				id_mesa: parseInt(id_mesa)
+			}
+		}).then(() => {
+			res.status(204).json({msg: "actualizado correctamente"});
+		}).catch(err => {
+			console.log("Error: " + err);
+           	res.status(500).json("Error en actualizacion de mesa");
+		})
+    }
 }

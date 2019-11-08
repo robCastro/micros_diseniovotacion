@@ -9,4 +9,5 @@ router.get('/votacion', disenioController.listar_votaciones);
 
 router.get('/mesas/:id', mesaController.getMesaId);
 router.get('/mesas/', mesaController.getMesas);
+router.put('/mesas/:id', mesaController.putMesaId);
 module.exports = router;
