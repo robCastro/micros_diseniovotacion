@@ -11,7 +11,7 @@ const tipoVotacionController = require('../controllers/tipoVotacionController');
 const votacionController = require('../controllers/votacionController');
 
 
-router.get('/votacion', disenioController.listar_votaciones);
+router.get('/votaciones/', votacionController.get_votaciones);
 router.get('/votaciones/:id', votacionController.get_votacion);
 
 
