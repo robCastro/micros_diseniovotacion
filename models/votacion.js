@@ -25,19 +25,11 @@ module.exports = function(sequelize, DataTypes) {
 			}
 		},
 		fecha_inicio_votacion: {
-			type: DataTypes.DATEONLY,
-			allowNull: false
-		},
-		hora_inicio_votacion: {
-			type: DataTypes.TIME,
+			type: DataTypes.DATE,
 			allowNull: false
 		},
 		fecha_fin_votacion: {
-			type: DataTypes.DATEONLY,
-			allowNull: false
-		},
-		hora_fin_votacion: {
-			type: DataTypes.TIME,
+			type: DataTypes.DATE,
 			allowNull: false
 		},
 		nombre_votacion: {
