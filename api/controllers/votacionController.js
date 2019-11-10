@@ -1,7 +1,10 @@
 'use strict';
 
 const models = require('../../models/index');
-const Op = models.Sequelize.Op; //Opciones para where, por ejemplo mayor que, menor que
+//Opciones para where, por ejemplo mayor que, menor que
+const Op = models.Sequelize.Op; 
+// para hacer request post a api crear votacion en otro micros
+var Request = require("request"); 
 
 
 const Votacion = models.votacion;
@@ -66,7 +69,6 @@ exports.get_votaciones = function(req, res){
 }
 
 exports.post_votacion = function(req, res){
-	console.log(req.body);
 	if (isNaN(parseInt(req.body.id_ordenamiento)) || isNaN(parseInt(req.body.id_tipo_votacion))){
 		res.status(400).json({msg: 'Usar parametros numericos'});
 	}
@@ -96,8 +98,25 @@ exports.post_votacion = function(req, res){
 										fecha_fin_votacion: fechaFin,
 										nombre_votacion: req.body.nombre_votacion,
 										descripcion_votacion: req.body.descripcion_votacion
+									// este then es en caso exitoso
 									}).then(votacion => {
-										res.status(200).json(votacion);
+										// propagando a microS votacion
+										Request.post({
+											"headers": { "content-type": "application/json" },
+											"url": "http://localhost:3001/api/votacion/votacion/",
+											"body": JSON.stringify(votacion)
+										}).on('response', function(response){
+											if(response.statusCode !== 200){
+												res.status(500).json({ msg: "Error guardando la votacion, revisar microS votacion" });
+												return votacion.destroy({force: true});
+											}
+											else{
+												res.status(200).json(votacion);
+											}
+										}).on('error', function(err){
+											res.status(500).json({ msg: "Error guardando la votacion, revisar microS votacion" });
+											return votacion.destroy({force: true});
+										});
 									}).catch(err => {
 										console.log('Error guardando la votacion: ' + err);
 				    					res.status(500).json({ msg: "Error guardando la votacion" });
