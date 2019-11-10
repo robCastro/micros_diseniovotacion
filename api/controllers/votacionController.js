@@ -103,7 +103,7 @@ exports.post_votacion = function(req, res){
 										// propagando a microS votacion
 										Request.post({
 											"headers": { "content-type": "application/json" },
-											"url": "http://localhost:3001/api/votacion/votacion/",
+											"url": "http://localhost:3003/api/votacion/votacion/",
 											"body": JSON.stringify(votacion)
 										}).on('response', function(response){
 											if(response.statusCode !== 200){
