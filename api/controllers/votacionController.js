@@ -1,9 +1,12 @@
 'use strict';
 
 const models = require('../../models/index');
+const Op = models.Sequelize.Op; //Opciones para where, por ejemplo mayor que, menor que
+
 
 const Votacion = models.votacion;
-const Op = models.Sequelize.Op; //Opciones para where, por ejemplo mayor que, menor que
+const Ordenamiento = models.ordenamiento;
+const TipoVotacion = models.tipo_votacion;
 
 exports.get_votacion = function(req, res){
 	if(Number.isNaN(parseInt(req.params.id))){
@@ -52,9 +55,66 @@ exports.get_votaciones = function(req, res){
 			}
 			
 		}
+		else{
+			res.status(400).json({msg: 'Especifique una fecha de inicio'});
+		}
 	}
 	else{
-		// todas
-		res.sendStatus(500);
+		// podrian ponerse todas las votaciones aca
+		res.status(400).json({msg: 'Especifique una fecha de inicio'});
 	}
+}
+
+exports.post_votacion = function(req, res){
+	console.log(req.body);
+	if (isNaN(parseInt(req.body.id_ordenamiento)) || isNaN(parseInt(req.body.id_tipo_votacion))){
+		res.status(400).json({msg: 'Usar parametros numericos'});
+	}
+	else{
+		let fechaInicio = new Date(req.body.fecha_inicio_votacion);
+		let fechaFin = new Date(req.body.fecha_fin_votacion);
+		if(fechaInicio instanceof Date && !isNaN(fechaInicio)){
+			if(fechaFin instanceof Date && !isNaN(fechaFin)){
+				Ordenamiento.findOne({
+					where:{id_ordenamiento: parseInt(req.body.id_ordenamiento)},
+					attributes: ['id_ordenamiento']
+				}).then(ordenamiento => {
+					if (ordenamiento !== null){
+						TipoVotacion.findOne({
+							where: {id_tipo_votacion: parseInt(req.body.id_tipo_votacion)},
+							attributes: ['id_tipo_votacion']
+						}).then(tipo => {
+							if (tipo !== null){
+								Votacion.create({
+									id_tipo_votacion: parseInt(req.body.id_tipo_votacion),
+									id_ordenamiento: parseInt(req.body.id_ordenamiento),
+									fecha_inicio_votacion: fechaInicio
+								})
+								res.status(200).json(tipo);
+							}
+							else{
+								res.status(404).json({msg: 'Tipo Votacion no existe'});
+							}
+						}).catch(err => {
+							console.log('Error verificando existencia de tipos de votacion: ' + err);
+			    			res.status(500).json({ msg: "Error verificando existencia de tipos de votacion" });
+						});
+					}
+					else{
+						res.status(404).json({msg: 'Ordenamiento no existe'});
+					}
+				}).catch(err => {
+					console.log('Error verificando existencia de ordenamiento: ' + err);
+			    	res.status(500).json({ msg: "Error verificando existencia de ordenamiento" });
+				});
+			}
+			else{
+				res.status(400).json({msg: 'Fecha de fin no valida'});
+			}
+		}
+		else{
+			res.status(400).json({msg: 'Fecha de inicio no valida'});
+		}
+	}
+	
 }

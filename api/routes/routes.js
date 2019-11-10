@@ -13,6 +13,7 @@ const votacionController = require('../controllers/votacionController');
 
 router.get('/votaciones/', votacionController.get_votaciones);
 router.get('/votaciones/:id', votacionController.get_votacion);
+router.post('/votaciones/', votacionController.post_votacion);
 
 
 router.get('/mesas/:id', mesaController.getMesaId);
