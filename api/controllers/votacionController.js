@@ -74,42 +74,55 @@ exports.post_votacion = function(req, res){
 		let fechaInicio = new Date(req.body.fecha_inicio_votacion);
 		let fechaFin = new Date(req.body.fecha_fin_votacion);
 		if(fechaInicio instanceof Date && !isNaN(fechaInicio)){
-			if(fechaFin instanceof Date && !isNaN(fechaFin)){
-				Ordenamiento.findOne({
-					where:{id_ordenamiento: parseInt(req.body.id_ordenamiento)},
-					attributes: ['id_ordenamiento']
-				}).then(ordenamiento => {
-					if (ordenamiento !== null){
-						TipoVotacion.findOne({
-							where: {id_tipo_votacion: parseInt(req.body.id_tipo_votacion)},
-							attributes: ['id_tipo_votacion']
-						}).then(tipo => {
-							if (tipo !== null){
-								Votacion.create({
-									id_tipo_votacion: parseInt(req.body.id_tipo_votacion),
-									id_ordenamiento: parseInt(req.body.id_ordenamiento),
-									fecha_inicio_votacion: fechaInicio
-								})
-								res.status(200).json(tipo);
-							}
-							else{
-								res.status(404).json({msg: 'Tipo Votacion no existe'});
-							}
-						}).catch(err => {
-							console.log('Error verificando existencia de tipos de votacion: ' + err);
-			    			res.status(500).json({ msg: "Error verificando existencia de tipos de votacion" });
-						});
-					}
-					else{
-						res.status(404).json({msg: 'Ordenamiento no existe'});
-					}
-				}).catch(err => {
-					console.log('Error verificando existencia de ordenamiento: ' + err);
-			    	res.status(500).json({ msg: "Error verificando existencia de ordenamiento" });
-				});
+			if (fechaInicio.getTime() <= (new Date).getTime()){
+				res.status(400).json({msg: 'La fecha de Inicio debe ser mayor a la fecha actual'});
 			}
 			else{
-				res.status(400).json({msg: 'Fecha de fin no valida'});
+				if(fechaFin instanceof Date && !isNaN(fechaFin)){
+					Ordenamiento.findOne({
+						where:{id_ordenamiento: parseInt(req.body.id_ordenamiento)},
+						attributes: ['id_ordenamiento']
+					}).then(ordenamiento => {
+						if (ordenamiento !== null){
+							TipoVotacion.findOne({
+								where: {id_tipo_votacion: parseInt(req.body.id_tipo_votacion)},
+								attributes: ['id_tipo_votacion']
+							}).then(tipo => {
+								if (tipo !== null){
+									Votacion.create({
+										id_tipo_votacion: parseInt(req.body.id_tipo_votacion),
+										id_ordenamiento: parseInt(req.body.id_ordenamiento),
+										fecha_inicio_votacion: fechaInicio,
+										fecha_fin_votacion: fechaFin,
+										nombre_votacion: req.body.nombre_votacion,
+										descripcion_votacion: req.body.descripcion_votacion
+									}).then(votacion => {
+										res.status(200).json(votacion);
+									}).catch(err => {
+										console.log('Error guardando la votacion: ' + err);
+				    					res.status(500).json({ msg: "Error guardando la votacion" });
+									});
+									
+								}
+								else{
+									res.status(404).json({msg: 'Tipo Votacion no existe'});
+								}
+							}).catch(err => {
+								console.log('Error verificando existencia de tipos de votacion: ' + err);
+				    			res.status(500).json({ msg: "Error verificando existencia de tipos de votacion" });
+							});
+						}
+						else{
+							res.status(404).json({msg: 'Ordenamiento no existe'});
+						}
+					}).catch(err => {
+						console.log('Error verificando existencia de ordenamiento: ' + err);
+				    	res.status(500).json({ msg: "Error verificando existencia de ordenamiento" });
+					});
+				}
+				else{
+					res.status(400).json({msg: 'Fecha de fin no valida'});
+				}
 			}
 		}
 		else{
