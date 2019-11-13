@@ -1,14 +1,14 @@
 {
   "development": {
-    "username": "pgkklgjyyarxhk",
-    "password": "4ae59ff9134b61ca624d983ee3e852bb82cba085304cbf9f3eccc1a2c251d0e3",
-    "database": "d4hfrnge86mks7",
-    "host": "ec2-54-235-96-48.compute-1.amazonaws.com",
+    "username": "postgres",
+    "password": "postgres",
+    "database": "prueba",
+    "host": "localhost",
     "dialect": "postgres",
     "port": "5432",
     "operatorsAliases": false,
     "dialectOptions": {
-      "ssl":true
+      "ssl":false
     }
   },
   "test": {
@@ -19,7 +19,7 @@
     "dialect": "mysql",
     "operatorsAliases": false
   },
-  "development": {
+  "production": {
     "username": "pgkklgjyyarxhk",
     "password": "4ae59ff9134b61ca624d983ee3e852bb82cba085304cbf9f3eccc1a2c251d0e3",
     "database": "d4hfrnge86mks7",
@@ -30,4 +30,5 @@
     "dialectOptions": {
       "ssl":true
     }
-}
+  }
+} 

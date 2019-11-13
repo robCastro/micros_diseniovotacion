@@ -4,6 +4,7 @@ const models = require('../../models/index');
 //Opciones para where, por ejemplo mayor que, menor que
 const Op = models.Sequelize.Op; 
 // para hacer request post a api crear votacion en otro micros
+const urls = require('../../urls');
 var Request = require("request"); 
 
 
@@ -101,9 +102,10 @@ exports.post_votacion = function(req, res){
 									// este then es en caso exitoso
 									}).then(votacion => {
 										// propagando a microS votacion
+										console.log("${urls.votacion}/votacion/")
 										Request.post({
 											"headers": { "content-type": "application/json" },
-											"url": "http://localhost:3003/api/votacion/votacion/",
+											"url": urls.votacion + "/votacion/",
 											"body": JSON.stringify(votacion)
 										}).on('response', function(response){
 											if(response.statusCode !== 200){
