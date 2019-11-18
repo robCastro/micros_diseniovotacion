@@ -70,6 +70,10 @@ exports.get_votaciones = function(req, res){
 }
 
 exports.post_votacion = function(req, res){
+	console.log(req.body);
+	console.log(req.body.tipoVotacion.id_tipo_votacion);
+	console.log(req.body.ordenamiento.id_ordenamiento);
+	console.log(new Date())
 	if (isNaN(parseInt(req.body.ordenamiento.id_ordenamiento)) || isNaN(parseInt(req.body.tipoVotacion.id_tipo_votacion))){
 		res.status(400).json({msg: 'Usar parametros numericos'});
 	}
@@ -83,12 +87,12 @@ exports.post_votacion = function(req, res){
 			else{
 				if(fechaFin instanceof Date && !isNaN(fechaFin)){
 					Ordenamiento.findOne({
-						where:{id_ordenamiento: parseInt(req.body.id_ordenamiento)},
+						where:{id_ordenamiento: parseInt(req.body.ordenamiento.id_ordenamiento)},
 						attributes: ['id_ordenamiento']
 					}).then(ordenamiento => {
 						if (ordenamiento !== null){
 							TipoVotacion.findOne({
-								where: {id_tipo_votacion: parseInt(req.body.id_tipo_votacion)},
+								where: {id_tipo_votacion: parseInt(req.body.tipoVotacion.id_tipo_votacion)},
 								attributes: ['id_tipo_votacion']
 							}).then(tipo => {
 								if (tipo !== null){
@@ -102,14 +106,14 @@ exports.post_votacion = function(req, res){
 									// este then es en caso exitoso
 									}).then(votacion => {
 										// propagando a microS votacion
-										console.log("${urls.votacion}/votacion/")
+										console.log(urls.votacion + "votacion/")
 										Request.post({
 											"headers": { "content-type": "application/json" },
-											"url": urls.votacion + "/votacion/",
+											"url": urls.votacion + "votacion/",
 											"body": JSON.stringify(votacion)
 										}).on('response', function(response){
 											if(response.statusCode !== 200){
-												res.status(500).json({ msg: "Error guardando la votacion, revisar microS votacion" });
+												res.status(500).json({ msg: "Error guardando la votacion, revisar microS votacion", micro_resp: response });
 												return votacion.destroy({force: true});
 											}
 											else{
