@@ -70,7 +70,7 @@ exports.get_votaciones = function(req, res){
 }
 
 exports.post_votacion = function(req, res){
-	if (isNaN(parseInt(req.body.id_ordenamiento)) || isNaN(parseInt(req.body.id_tipo_votacion))){
+	if (isNaN(parseInt(req.body.ordenamiento.id_ordenamiento)) || isNaN(parseInt(req.body.tipoVotacion.id_tipo_votacion))){
 		res.status(400).json({msg: 'Usar parametros numericos'});
 	}
 	else{
@@ -93,8 +93,8 @@ exports.post_votacion = function(req, res){
 							}).then(tipo => {
 								if (tipo !== null){
 									Votacion.create({
-										id_tipo_votacion: parseInt(req.body.id_tipo_votacion),
-										id_ordenamiento: parseInt(req.body.id_ordenamiento),
+										id_tipo_votacion: parseInt(req.body.tipoVotacion.id_tipo_votacion),
+										id_ordenamiento: parseInt(req.body.ordenamiento.id_ordenamiento),
 										fecha_inicio_votacion: fechaInicio,
 										fecha_fin_votacion: fechaFin,
 										nombre_votacion: req.body.nombre_votacion,
