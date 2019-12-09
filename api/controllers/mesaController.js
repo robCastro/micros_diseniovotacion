@@ -126,3 +126,28 @@ exports.putMesaId = function(req, res){
 		})
     }
 }
+
+exports.anular_voto = function(id_mesa, consumer, mensaje){
+	console.log(id_mesa);
+	Mesa.findByPk(parseInt(id_mesa)).then(mesa => {
+		return mesa.increment('cantidad_anulados_mesa', {by: 1});
+	}).then(mesa => {
+		// Por si acaso hay que hacer algo con la mesa actualizada
+		consumer.commitMessage(mensaje);
+		console.log('Voto Anulado registrado, commit realizado');
+	}).catch(err => {
+		console.log('Error: ', err);
+	});
+}
+
+exports.abstener_voto = function(id_mesa, consumer, mensaje){
+	Mesa.findByPk(id_mesa).then(mesa => {
+		return mesa.increment('cantidad_abstenciones_mesa', {by: 1});
+	}).then(mesa => {
+		// Por si acaso hay que hacer algo con la mesa actualizada
+		consumer.commitMessage(mensaje);
+		console.log('Abstencion registrada, commit realizado');
+	}).catch(err => {
+		console.log('Error: ', err);
+	});
+}

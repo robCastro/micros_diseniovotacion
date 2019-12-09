@@ -2,6 +2,8 @@ const Kafka = require("node-rdkafka");
 require('dotenv').config();
 
 const post_votacion = require('../api/controllers/votacionController').post_votacion;
+const anular_voto = require('../api/controllers/mesaController').anular_voto;
+const abstener_voto = require('../api/controllers/mesaController').abstener_voto;
 
 var kafkaConf = {
   //Info: https://github.com/edenhill/librdkafka/blob/v1.2.2/CONFIGURATION.md
@@ -18,7 +20,7 @@ var kafkaConf = {
 };
 
 const prefix = process.env.CLOUDKARAFKA_TOPIC_PREFIX;
-const topics = [`${prefix}Votacion`];
+const topics = [`${prefix}Votacion`, `${prefix}Anular`];
 const consumer = new Kafka.KafkaConsumer(kafkaConf, {
   "auto.offset.reset": "beginning",
 
@@ -48,6 +50,14 @@ consumer.on("data", function(m) {
       // Luego subir de nuevo postgres y reiniciar el consumer
       console.log('Error: ', err);
     });
+  }
+  if(m.topic === '40khj5pk-Anular' && m.partition === 0){
+    mensaje = JSON.parse(m.value.toString());
+    console.log(mensaje.id_mesa);  
+    if(mensaje.anular)
+      anular_voto(mensaje.id_mesa, consumer, m);
+    else
+      abstener_voto(mensaje.id_mesa, consumer, m);
   }
 });
 
